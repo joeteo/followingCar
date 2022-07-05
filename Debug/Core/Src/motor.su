@@ -1,0 +1,9 @@
+../Core/Src/motor.c:13:6:Move	16	static
+../Core/Src/motor.c:66:6:Forward	8	static
+../Core/Src/motor.c:79:6:Backward	8	static
+../Core/Src/motor.c:92:6:Right	8	static
+../Core/Src/motor.c:105:6:Left	8	static
+../Core/Src/motor.c:118:6:Cw	8	static
+../Core/Src/motor.c:131:6:Ccw	8	static
+../Core/Src/motor.c:145:6:Stop	8	static
+../Core/Src/motor.c:156:6:initmotor	4	static
