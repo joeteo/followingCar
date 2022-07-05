@@ -20,6 +20,7 @@
 #include "main.h"
 #include "i2c.h"
 #include "rtc.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -29,6 +30,7 @@
 #include "bluetooth.h"
 #include <stdio.h>
 #include "HMC5883L.h"
+#include "motor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -69,6 +71,7 @@ PUTCHAR_PROTOTYPE
 /* USER CODE BEGIN PV */
 extern GPS_t GPS;
 extern PhoneGPS phoneGPS;
+extern int controlCMD;
 
 Vector mag;
 float heading;
@@ -128,12 +131,14 @@ int main(void)
   MX_USART3_UART_Init();
   MX_UART7_Init();
   MX_I2C1_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
 
   GPS_Init();
   BT_Init();
   Compass_Init();
+  initmotor();
 
   /* USER CODE END 2 */
 
@@ -143,6 +148,10 @@ int main(void)
   {
 
 	  calculateHeading();
+	  Move(controlCMD);
+
+
+
 	  HAL_Delay(70);
 
 
