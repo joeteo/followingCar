@@ -153,7 +153,7 @@ void Stop()
 
 }
 
-void initmotor(){
+void Motor_Init(){
 	TIM2->CCR1 = SPEED;
 	TIM2->CCR2 = SPEED;
 	TIM2->CCR3 = SPEED;

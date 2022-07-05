@@ -103,6 +103,8 @@ typedef struct
 
 	void Compass_Init();
 
+	void calculateHeading(void);
+
 #ifdef __cplusplus
 }
 #endif

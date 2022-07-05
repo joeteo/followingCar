@@ -60,10 +60,6 @@ PUTCHAR_PROTOTYPE
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 
-#include <math.h>
-#define _USE_MATH_DEFINES
-
-
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -71,19 +67,16 @@ PUTCHAR_PROTOTYPE
 /* USER CODE BEGIN PV */
 extern GPS_t GPS;
 extern PhoneGPS phoneGPS;
+
 extern int controlCMD;
 
-Vector mag;
-float heading;
+extern Vector mag;
+extern float heading;
+extern float declinationAngle;
+extern float headingDegrees;
 
-float declinationAngle;
-
-float headingDegrees;
-
-float distance_long;
-float distance_lat;
-
-
+extern float distance_long;
+extern float distance_lat;
 
 /* USER CODE END PV */
 
@@ -138,7 +131,12 @@ int main(void)
   GPS_Init();
   BT_Init();
   Compass_Init();
-  initmotor();
+  Motor_Init();
+
+  uint32_t start_tick = HAL_GetTick();
+  uint32_t current_tick;
+
+
 
   /* USER CODE END 2 */
 
@@ -147,12 +145,18 @@ int main(void)
   while (1)
   {
 
-	  calculateHeading();
+	  current_tick = HAL_GetTick();
+	  if(current_tick - start_tick >= 70){
+		  calculateHeading();
+		  start_tick = current_tick;
+	  }
+
+
+
 	  Move(controlCMD);
 
 
 
-	  HAL_Delay(70);
 
 
 
@@ -227,54 +231,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	if(huart == &huart2) GPS_UART_CallBack();
 	if(huart->Instance == UART7) Phone_UART_CallBack();
 
-}
-
-void calculateHeading(void){
-	  mag = HMC5883L_readNormalize ();
-//	  printf ("XAxis %0.2f, YAxis %0.2f, ZAxis %0.2f \r\n", mag.XAxis, mag.YAxis, mag.ZAxis);
-
-	  // Calculate heading
-	  heading = atan2(mag.YAxis, mag.XAxis);
-	  // Set declination angle on your location and fix heading
-	  // You can find your declination on: http://magnetic-declination.com/
-	  // (+) Positive or (-) for negative
-	  // For Bytom / Poland declination angle is 4'26E (positive)
-	  // Formula: (deg + (min / 60.0)) / (180 / M_PI);
-	  declinationAngle = (8.0 + (50.0 / 60.0)) / (180 / M_PI);
-	  heading += declinationAngle;
-	  // Correct for heading < 0deg and heading > 360deg
-	  if (heading < 0)
-	  {
-	  heading += 2 * M_PI;
-	  }
-	  if (heading > 2 * M_PI)
-	  {
-	  heading -= 2 * M_PI;
-	  }
-	  // Convert to degrees
-	  headingDegrees = heading * 180/M_PI; // Fix HMC5883L issue with angles
-//	  float fixedHeadingDegrees;
-//	  if (headingDegrees >= 1 && headingDegrees < 240)
-//	  {
-//	  fixedHeadingDegrees = map(headingDegrees, 0, 239, 0, 179);
-//	  } else
-//	  if (headingDegrees >= 240)
-//	  {
-//	  fixedHeadingDegrees = map(headingDegrees, 240, 360, 180, 360);
-//	  }
-//	  // Smooth angles rotation for +/- 3deg
-//	  int smoothHeadingDegrees = round(fixedHeadingDegrees);
-//	  if (smoothHeadingDegrees < (previousDegree + 3) && smoothHeadingDegrees > (previousDegree - 3))
-//	  {
-//	  smoothHeadingDegrees = previousDegree;
-//	  }
-//	  previousDegree = smoothHeadingDegrees;
-	  // Output
-//	  printf ("headingDegrees : %.0f\r\n", headingDegrees);
-//	  printf ("headingDegrees : %.0f\r\n", fixedHeadingDegrees);
-//	  printf ("headingDegrees : %.0f\r\n", smoothHeadingDegrees);
-
-	  // We need delay ~28ms for allow data rate 30Hz (~33ms)
 }
 
 /* USER CODE END 4 */

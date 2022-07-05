@@ -6,4 +6,4 @@
 ../Core/Src/motor.c:118:6:Cw	8	static
 ../Core/Src/motor.c:131:6:Ccw	8	static
 ../Core/Src/motor.c:145:6:Stop	8	static
-../Core/Src/motor.c:156:6:initmotor	4	static
+../Core/Src/motor.c:156:6:Motor_Init	4	static

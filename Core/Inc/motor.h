@@ -31,7 +31,7 @@ void Left();
 void Cw();
 void Ccw();
 void Stop();
-void initmotor();
+void Motor_Init();
 
 
 
