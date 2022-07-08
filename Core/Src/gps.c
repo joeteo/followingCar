@@ -48,6 +48,7 @@ uint8_t rx_data = 0;
 uint8_t rx_buffer[GPSBUFSIZE];
 uint8_t rx_index = 0;
 
+
 GPS_t GPS;
 
 #if (GPS_DEBUG == 1)
@@ -143,13 +144,7 @@ void GPS_parse(char *GPSstrParse){
     		GPS.dec_latitude = GPS_nmea_to_dec(GPS.nmea_latitude, GPS.ns);
     		GPS.dec_longitude = GPS_nmea_to_dec(GPS.nmea_longitude, GPS.ew);
 
-    		char buf[GPSBUFSIZE] = {0,};
-			sprintf(buf, ",%f,%f\n\r", GPS.dec_latitude, GPS.dec_longitude);
-			// transmit data to bluetooth module
-			HAL_UART_Transmit(&huart7, (unsigned char *)buf, strlen(buf), 10);
-
-
-
+    		transmit_To_Phone();
 
 			// transmit data to huart3 for check
 /*			HAL_UART_Transmit(&huart3, (unsigned char *)buf, strlen(buf), 10);*/

@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include "HMC5883L.h"
 #include "motor.h"
+#include "selfDriving.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -66,17 +67,12 @@ PUTCHAR_PROTOTYPE
 
 /* USER CODE BEGIN PV */
 extern GPS_t GPS;
-extern PhoneGPS phoneGPS;
+extern _DestinationGPS phoneGPS;
+extern _DestinationGPS waypointGPS;
 
 extern int controlCMD;
+extern uint8_t Mode_Flag;
 
-extern Vector mag;
-extern float heading;
-extern float declinationAngle;
-extern float headingDegrees;
-
-extern float distance_long;
-extern float distance_lat;
 
 /* USER CODE END PV */
 
@@ -151,17 +147,20 @@ int main(void)
 		  start_tick = current_tick;
 	  }
 
+	  if(Mode_Flag==CONTROL_MODE){
+		  Move(controlCMD);
+
+	  }else if(Mode_Flag==WAYPOINT_MODE){
+		  SelfDriving();
+
+	  }else if(Mode_Flag==AUTO_MODE){
 
 
-	  Move(controlCMD);
+	  }
 
 
 
 
-
-
-	  distance_long=(phoneGPS.longitude - GPS.dec_longitude)*100000;
-	  distance_lat=(phoneGPS.latitude - GPS.dec_latitude)*100000;
 
     /* USER CODE END WHILE */
 

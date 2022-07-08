@@ -12,8 +12,6 @@ Vector mag;
 float heading;
 float declinationAngle;
 float headingDegrees;
-float distance_long;
-float distance_lat;
 
 extern I2C_HandleTypeDef I2C;
 

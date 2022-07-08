@@ -13,19 +13,23 @@
 
 #define CONTROL_MODE_SIGNAL 0x43
 #define AUTO_MODE_SIGNAL 0x41
+#define WAYPOINT_MODE_SIGNAL 0x57
 
 enum{
 	CONTROL_MODE,
+	WAYPOINT_MODE,
 	AUTO_MODE
 };
 
 typedef struct{
     float longitude;
     float latitude;
-}PhoneGPS;
+}_DestinationGPS;
 
 void BT_Init();
 void Phone_UART_CallBack();
+
+void transmit_To_Phone();
 
 
 #endif /* INC_BLUETOOTH_H_ */
