@@ -23,6 +23,6 @@ typedef enum{
 }_bool;
 
 void SelfDriving();
-_bool chkCWCCW(float target_angle, float car_angle);
+CONTROLLER_SIGNAL chkCWCCW(float target_angle, float car_angle);
 
 #endif /* INC_SELFDRIVING_H_ */

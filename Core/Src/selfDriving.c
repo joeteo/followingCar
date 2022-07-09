@@ -25,28 +25,32 @@ double target_angle;	//자동차가 바라봐야할 목표의 각도
 
 int diffAngle;
 
+CONTROLLER_SIGNAL rotate=STOP;
+uint8_t rotate_flag=0;
+
 extern GPS_t GPS;
 extern _DestinationGPS waypointGPS;
+_DestinationGPS waypointBefore;
 
 _Quadrant quadrant;
 
-_bool chkCWCCW(float target_angle, float car_angle) {
+CONTROLLER_SIGNAL chkCWCCW(float target_angle, float car_angle) {
 	if (car_angle < 180) {
 		double distance_angle = target_angle - car_angle;
 		if (distance_angle > 0 && distance_angle < 180) {
-			return TRUE;
+			return CW;
 		}
 		else {
-			return FALSE;
+			return CCW;
 		}
 	}
 	else {
 		double distance_angle = (target_angle + 360) - car_angle;
 		if (distance_angle < 180 || distance_angle >(car_angle + 360)) {
-			return TRUE;
+			return CW;
 		}
 		else {
-			return FALSE;
+			return CCW;
 		}
 	}
 }
@@ -97,22 +101,36 @@ void SelfDriving(){
 
 	  diffAngle = abs((int)headingDegrees - (int)target_angle);
 
-	  if (diffAngle > 30 && diffAngle < 330) {
-
-		  if (chkCWCCW((float)target_angle, headingDegrees)) {
-			  Move(CW);
-		  }
-		  else {
-			  Move(CCW);
-		  }
-
+	  if ((diffAngle > 10 && diffAngle < 350) && rotate_flag==0) {
+		  rotate=chkCWCCW((float)target_angle, headingDegrees);
+		  rotate_flag=1;
+		  waypointBefore.latitude=waypointGPS.latitude;
+		  waypointBefore.longitude=waypointGPS.longitude ;
 	  }
-	  else if (distance_c > 50) {
+
+	  if((waypointGPS.latitude!=waypointBefore.latitude && waypointGPS.longitude!=waypointBefore.longitude)){
+		  rotate=chkCWCCW((float)target_angle, headingDegrees);
+	  }
+
+
+	  if((diffAngle < 10 || diffAngle > 350)) {
+		  rotate_flag=0;
+	  }
+
+
+	  if(rotate_flag==1){
+		  Move(rotate);
+	  }
+
+
+
+	  if (distance_c > 50 && rotate_flag==0) {
 		  Move(FORWARD);
 	  }
-	  else {
+	  else if(distance_c < 50 && rotate_flag==0){
 		  Move(STOP);
 	  }
+
 
 
 }

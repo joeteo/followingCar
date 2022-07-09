@@ -193,7 +193,7 @@ void Compass_Init(){
 	HMC5883L_setMeasurementMode (HMC5883L_CONTINOUS);
 	HMC5883L_setDataRate (HMC5883L_DATARATE_15HZ);
 	HMC5883L_setSamples (HMC5883L_SAMPLES_1);
-	HMC5883L_setOffset (0, 0);
+	HMC5883L_setOffset (40, -200);
 }
 
 void calculateHeading(void){
@@ -207,8 +207,9 @@ void calculateHeading(void){
 	  // (+) Positive or (-) for negative
 	  // For Bytom / Poland declination angle is 4'26E (positive)
 	  // Formula: (deg + (min / 60.0)) / (180 / M_PI);
-	  declinationAngle = (8.0 + (50.0 / 60.0)) / (180 / M_PI);
-	  heading += declinationAngle;
+	  //declinationAngle = (40.0 + 8.0 + (50.0 / 60.0)) / (180 / M_PI);
+	  //declinationAngle = (10.0) / (180 / M_PI);
+	  //heading += declinationAngle;
 	  // Correct for heading < 0deg and heading > 360deg
 	  if (heading < 0)
 	  {
