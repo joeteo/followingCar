@@ -108,21 +108,18 @@ void SelfDriving(){
 		  waypointBefore.longitude=waypointGPS.longitude ;
 	  }
 
-	  if((waypointGPS.latitude!=waypointBefore.latitude && waypointGPS.longitude!=waypointBefore.longitude)){
+	  if((waypointGPS.latitude!=waypointBefore.latitude 
+	      && waypointGPS.longitude!=waypointBefore.longitude)){
 		  rotate=chkCWCCW((float)target_angle, headingDegrees);
 	  }
-
 
 	  if((diffAngle < 10 || diffAngle > 350)) {
 		  rotate_flag=0;
 	  }
 
-
 	  if(rotate_flag==1){
 		  Move(rotate);
 	  }
-
-
 
 	  if (distance_c > 50 && rotate_flag==0) {
 		  Move(FORWARD);
@@ -130,7 +127,5 @@ void SelfDriving(){
 	  else if(distance_c < 50 && rotate_flag==0){
 		  Move(STOP);
 	  }
-
-
 
 }
