@@ -26,6 +26,7 @@ double target_angle;	//자동차가 바라봐야할 목표의 각도
 int diffAngle;
 
 CONTROLLER_SIGNAL rotate=STOP;
+CONTROLLER_SIGNAL moveSignal;
 uint8_t rotate_flag=0;
 
 extern GPS_t GPS;
@@ -101,31 +102,39 @@ void SelfDriving(){
 
 	  diffAngle = abs((int)headingDegrees - (int)target_angle);
 
-	  if ((diffAngle > 10 && diffAngle < 350) && rotate_flag==0) {
+	  if ((diffAngle > 10 && diffAngle < 350) && rotate_flag==0 && distance_c > 50) {
 		  rotate=chkCWCCW((float)target_angle, headingDegrees);
 		  rotate_flag=1;
 		  waypointBefore.latitude=waypointGPS.latitude;
 		  waypointBefore.longitude=waypointGPS.longitude ;
 	  }
 
+
 	  if((waypointGPS.latitude!=waypointBefore.latitude 
 	      && waypointGPS.longitude!=waypointBefore.longitude)){
 		  rotate=chkCWCCW((float)target_angle, headingDegrees);
 	  }
+
+
 
 	  if((diffAngle < 10 || diffAngle > 350)) {
 		  rotate_flag=0;
 	  }
 
 	  if(rotate_flag==1){
-		  Move(rotate);
+		  moveSignal=rotate;
+		  //Move(rotate);
 	  }
 
 	  if (distance_c > 50 && rotate_flag==0) {
-		  Move(FORWARD);
+		  moveSignal = FORWARD;
+		  //Move(FORWARD);
 	  }
-	  else if(distance_c < 50 && rotate_flag==0){
-		  Move(STOP);
+	  else if(distance_c < 50){
+		  moveSignal = STOP;
+		  //Move(STOP);
 	  }
+
+	  Move(moveSignal);
 
 }

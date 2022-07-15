@@ -147,17 +147,19 @@ int main(void)
 		  start_tick = current_tick;
 	  }
 
+
 	  if(Mode_Flag==CONTROL_MODE){
 		  Move(controlCMD);
 
 	  }else if(Mode_Flag==WAYPOINT_MODE){
-		  SelfDriving();
+		  if(waypointGPS.latitude!=0 && waypointGPS.latitude!=0){
+			  SelfDriving();
+		  }
 
 	  }else if(Mode_Flag==AUTO_MODE){
 
 
 	  }
-
 
 
 
