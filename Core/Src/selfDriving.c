@@ -35,26 +35,26 @@ _DestinationGPS waypointBefore;
 
 _Quadrant quadrant;
 
-CONTROLLER_SIGNAL chkCWCCW(float target_angle, float car_angle) {
-	if (car_angle < 180) {
-		double distance_angle = target_angle - car_angle;
-		if (distance_angle > 0 && distance_angle < 180) {
-			return CW;
-		}
-		else {
-			return CCW;
-		}
-	}
-	else {
-		double distance_angle = (target_angle + 360) - car_angle;
-		if (distance_angle < 180 || distance_angle >(car_angle + 360)) {
-			return CW;
-		}
-		else {
-			return CCW;
-		}
-	}
-}
+//CONTROLLER_SIGNAL chkCWCCW(float target_angle, float car_angle) {
+//	if (car_angle < 180) {
+//		double distance_angle = target_angle - car_angle;
+//		if (distance_angle > 0 && distance_angle < 180) {
+//			return CW;
+//		}
+//		else {
+//			return CCW;
+//		}
+//	}
+//	else {
+//		double distance_angle = (target_angle + 360) - car_angle;
+//		if (distance_angle < 180 || distance_angle >(car_angle + 360)) {
+//			return CW;
+//		}
+//		else {
+//			return CCW;
+//		}
+//	}
+//}
 
 void SelfDriving(){
 
