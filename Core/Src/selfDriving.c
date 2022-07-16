@@ -25,7 +25,7 @@ double target_angle;	//자동차가 바라봐야할 목표의 각도
 
 int diffAngle;
 
-CONTROLLER_SIGNAL rotate=STOP;
+//CONTROLLER_SIGNAL rotate=STOP;
 CONTROLLER_SIGNAL moveSignal;
 uint8_t rotate_flag=0;
 
@@ -100,39 +100,23 @@ void SelfDriving(){
 	  }
 
 
-	  diffAngle = abs((int)headingDegrees - (int)target_angle);
+	  diffAngle = ((int)target_angle - (int)headingDegrees + 360) % 360;
 
-	  if ((diffAngle > 10 && diffAngle < 350) && rotate_flag==0 && distance_c > 50) {
-		  rotate=chkCWCCW((float)target_angle, headingDegrees);
-		  rotate_flag=1;
-		  waypointBefore.latitude=waypointGPS.latitude;
-		  waypointBefore.longitude=waypointGPS.longitude ;
-	  }
-
-
-	  if((waypointGPS.latitude!=waypointBefore.latitude 
-	      && waypointGPS.longitude!=waypointBefore.longitude)){
-		  rotate=chkCWCCW((float)target_angle, headingDegrees);
-	  }
-
-
-
-	  if((diffAngle < 10 || diffAngle > 350)) {
-		  rotate_flag=0;
-	  }
-
-	  if(rotate_flag==1){
-		  moveSignal=rotate;
-		  //Move(rotate);
-	  }
-
-	  if (distance_c > 50 && rotate_flag==0) {
-		  moveSignal = FORWARD;
-		  //Move(FORWARD);
-	  }
-	  else if(distance_c < 50){
+	  if(distance_c < 50){
 		  moveSignal = STOP;
-		  //Move(STOP);
+
+	  }else {
+		  if ((diffAngle >= 345) || (diffAngle < 15)){
+			  moveSignal = FORWARD;
+
+		  }else {
+
+			  if ((diffAngle >= 180) && (diffAngle < 345)){
+				  moveSignal = CCW;
+			  }else if ((diffAngle >= 15) && (diffAngle < 180)){
+				  moveSignal = CW;
+			  }
+		  }
 	  }
 
 	  Move(moveSignal);
